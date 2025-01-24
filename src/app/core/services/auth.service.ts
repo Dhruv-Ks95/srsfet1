@@ -38,6 +38,12 @@ export class AuthService {
     }
 
     isAdmin(): boolean {
-        return this.currentUserSubject.value?.role === 1;
+        const user = this.currentUserSubject.value;
+        return !!user && user.role === 1;
     }
+    
+    getCurrentUser(): Employee | null {
+        return this.currentUserSubject.value;
+    }
+
 }

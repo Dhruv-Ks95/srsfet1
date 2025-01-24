@@ -1,0 +1,64 @@
+<div class="main-container">
+    <!-- Side Navigation -->
+    <div class="side-nav">
+        <div class="nav-item" routerLink="/user">Home</div>
+        <div class="nav-item" routerLink="/add-booking">Add Booking</div>
+        <div class="nav-item active" routerLink="/cancel-booking">Cancel Booking</div>
+        <div class="nav-item" routerLink="/multiple-booking">Book Multiple Days</div>
+        <div class="nav-item logout" (click)="logout()">Logout</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="header">
+            <h2>Cancel Bookings</h2>
+            <p>Select the bookings you want to cancel</p>
+        </div>
+
+        @if (loading) {
+        <div class="loading">Loading your bookings...</div>
+        } @else if (bookings.length === 0) {
+        <div class="no-bookings">You have no bookings to cancel.</div>
+        } @else {
+        <div class="bookings-section">
+            <div class="bookings-grid">
+                @for (booking of bookings; track booking.bookingId) {
+                <div class="booking-card" [class.selected]="booking.isSelected" (click)="toggleSelection(booking)">
+                    <div class="booking-date">
+                        {{ booking.bookingDate | date:'MMM d, y' }}
+                    </div>
+                    <div class="booking-seat">
+                        Seat {{ booking.seatNumber }}
+                    </div>
+                </div>
+                }
+            </div>
+
+            @if (getSelectedBookings().length > 0) {
+            <div class="action-bar">
+                <button class="cancel-button" (click)="confirmCancellation()">
+                    Cancel {{ getSelectedBookings().length }} Selected Booking(s)
+                </button>
+            </div>
+            }
+        </div>
+        }
+
+        @if (showConfirmDialog) {
+        <div class="modal-overlay">
+            <div class="modal-content">
+                <h3>Confirm Cancellation</h3>
+                <p>Are you sure you want to cancel the selected booking(s)?</p>
+                <div class="modal-actions">
+                    <button class="confirm-button" (click)="cancelBookings()">
+                        Yes, Cancel Booking(s)
+                    </button>
+                    <button class="cancel-button secondary" (click)="showConfirmDialog = false">
+                        No, Keep Booking(s)
+                    </button>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
